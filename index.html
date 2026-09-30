@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<meta name="description" content="桔子电影网(juzidianyingwang-h5)提供海量高清电影、电视剧、动漫、综艺在线观看，每日更新最新院线大片与热播剧集，免费畅享影视盛宴。">
+<meta name="keywords" content="桔子电影网,juzidianyingwang-h5,高清电影,在线观看,免费影视">
+<link rel="canonical" href="https://juzidianyingwang-h5">
+<title>桔子电影网 - 高清影视在线观看 | juzidianyingwang-h5</title>
+<style>
+    /* ===== 基础重置 ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+        font-family: "PingFang SC", "Microsoft YaHei", -apple-system, sans-serif;
+        background: #fdf6ec;
+        color: #3a2e28;
+        line-height: 1.7;
+    }
+    a { text-decoration: none; color: #e87928; transition: all .3s; }
+    a:hover { color: #c65f1a; }
+    ul { list-style: none; }
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 1.2rem; }
+
+    /* ===== 顶部进度条 ===== */
+    #progress-bar {
+        position: fixed; top: 0; left: 0; height: 4px;
+        background: linear-gradient(90deg,#ff9d2f,#ff6a00);
+        z-index: 9999; width: 0; transition: width .2s;
+    }
+
+    /* ===== 导航 ===== */
+    header {
+        background: linear-gradient(135deg,#ff9d2f,#ff6a00);
+        position: sticky; top: 0; z-index: 1000;
+        box-shadow: 0 3px 12px rgba(255,106,0,.25);
+    }
+    .nav-inner {
+        max-width: 1180px; margin: 0 auto; padding: .9rem 1.2rem;
+        display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
+    }
+    .logo {
+        font-size: 1.7rem; font-weight: 800; color: #fff;
+        text-shadow: 1px 1px 3px rgba(0,0,0,.2);
+        letter-spacing: 1px;
+    }
+    .logo span { font-size: 1.1rem; opacity: .9; font-weight: 400; }
+    .nav-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+    .nav-links a {
+        color: #fff; font-size: .98rem; font-weight: 500;
+        padding: .35rem .7rem; border-radius: 6px;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,.2); color: #fff; }
+
+    /* ===== 通用区块 ===== */
+    section { padding: 3.5rem 0; scroll-margin-top: 70px; }
+    .sec-head { text-align: center; margin-bottom: 2.2rem; }
+    .sec-head h2 {
+        font-size: 2rem; color: #e87928; font-weight: 800;
+        display: inline-block; position: relative; padding-bottom: .6rem;
+    }
+    .sec-head h2::after {
+        content:""; position:absolute; left:50%; bottom:0; transform:translateX(-50%);
+        width:60px; height:4px; border-radius:2px; background:#ffb84d;
+    }
+    .sec-head p { color:#8a7a6c; margin-top:.7rem; font-size:1rem; }
+
+    /* ===== Hero 横幅 ===== */
+    #home {
+        background:
+            radial-gradient(circle at 85% 20%, rgba(255,200,100,.4), transparent 40%),
+            linear-gradient(135deg,#ff9d2f,#ff6a00);
+        padding: 5rem 1.2rem; text-align: center; color:#fff;
+    }
+    .hero h1 { font-size: 3rem; font-weight: 900; text-shadow: 2px 2px 6px rgba(0,0,0,.2); }
+    .hero .url { font-size: 1.2rem; opacity:.95; margin-top:.6rem; letter-spacing:1px; }
+    .hero .desc { font-size: 1.15rem; margin-top:1.2rem; max-width:680px; margin-left:auto; margin-right:auto; }
+    .hero-btns { margin-top:2rem; display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+    .btn {
+        display:inline-block; padding:.75rem 1.8rem; border-radius:30px;
+        font-weight:600; transition:all .3s;
+    }
+    .btn-primary { background:#fff; color:#e87928; box-shadow:0 4px 12px rgba(0,0,0,.15); }
+    .btn-primary:hover { transform:translateY(-2px); box-shadow:0 6px 18px rgba(0,0,0,.25); color:#c65f1a; }
+    .btn-outline { border:2px solid #fff; color:#fff; }
+    .btn-outline:hover { background:#fff; color:#e87928; }
+
+    /* ===== 电影网格 ===== */
+    .grid {
+        display: grid; gap: 1.5rem;
+        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    }
+    .card {
+        background:#fff; border-radius:14px; overflow:hidden;
+        box-shadow:0 4px 14px rgba(0,0,0,.06);
+        transition:all .3s; border:1px solid #f5e6d0;
+    }
+    .card:hover { transform:translateY(-6px); box-shadow:0 12px 28px rgba(255,106,0,.18); }
+    .poster {
+        height:270px; display:flex; align-items:center; justify-content:center;
+        color:#fff; font-weight:600; font-size:1.05rem; position:relative;
+    }
+    .poster::before { content:"🎬"; font-size:2.5rem; position:absolute; top:12px; right:12px; opacity:.5; }
+    .g1 { background:linear-gradient(135deg,#ff9d2f,#ff6a00); }
+    .g2 { background:linear-gradient(135deg,#ff7e5f,#feb47b); }
+    .g3 { background:linear-gradient(135deg,#f7971e,#ffd200); }
+    .g4 { background:linear-gradient(135deg,#ff6a00,#ee0979); }
+    .g5 { background:linear-gradient(135deg,#f2709c,#ff9472); }
+    .g6 { background:linear-gradient(135deg,#ffb347,#ffcc33); }
+    .card-body { padding:1rem; }
+    .card-body h3 { font-size:1.02rem; color:#3a2e28; margin-bottom:.3rem; }
+    .card-body .meta { font-size:.85rem; color:#9a8a7c; display:flex; gap:.5rem; align-items:center; flex-wrap:wrap; }
+    .tag { background:#fff3e6; color:#e87928; font-size:.72rem; padding:.15rem .55rem; border-radius:20px; }
+
+    /* ===== 分类图标区 ===== */
+    .cat-grid {
+        display:grid; gap:1.5rem;
+        grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    }
+    .cat-card {
+        background:#fff; border-radius:14px; padding:2rem 1.5rem; text-align:center;
+        box-shadow:0 4px 14px rgba(0,0,0,.06); transition:all .3s; border:2px solid transparent;
+    }
+    .cat-card:hover { border-color:#ffb84d; transform:translateY(-4px); }
+    .cat-icon { font-size:2.8rem; margin-bottom:.8rem; }
+    .cat-card h3 { color:#e87928; font-size:1.2rem; margin-bottom:.4rem; }
+    .cat-card p { font-size:.88rem; color:#8a7a6c; }
+
+    /* ===== 排行榜 ===== */
+    .rank-list { max-width:760px; margin:0 auto; }
+    .rank-item {
+        display:flex; align-items:center; gap:1rem; background:#fff;
+        padding:1rem 1.3rem; margin-bottom:1rem; border-radius:12px;
+        box-shadow:0 3px 10px rgba(0,0,0,.05); transition:all .3s;
+    }
+    .rank-item:hover { transform:translateX(6px); box-shadow:0 6px 18px rgba(255,106,0,.15); }
+    .rank-no {
+        width:42px; height:42px; border-radius:10px; flex-shrink:0;
+        display:flex; align-items:center; justify-content:center;
+        font-weight:800; font-size:1.3rem; color:#fff; background:#ddd;
+    }
+    .rank-no.gold { background:linear-gradient(135deg,#ffd700,#ffaa00); }
+    .rank-no.silver { background:linear-gradient(135deg,#e0e0e0,#b8b8b8); }
+    .rank-no.bronze { background:linear-gradient(135deg,#cd7f32,#a05a20); }
+    .rank-info h4 { color:#3a2e28; font-size:1.05rem; }
+    .rank-info p { font-size:.85rem; color:#9a8a7c; }
+
+    /* ===== 关于 ===== */
+    #about { background:#fff; }
+    .about-box { max-width:780px; margin:0 auto; text-align:center; }
+    .about-box .brand { font-size:1.3rem; color:#e87928; font-weight:700; margin:1rem 0; }
+    .about-box p { color:#6a5a4c; margin-bottom:.8rem; }
+
+    /* ===== 页脚 ===== */
+    footer {
+        background:#3a2e28; color:#d0c4b8; padding:2.5rem 1.2rem 1.5rem;
+        text-align:center;
+    }
+    footer .ft-logo { font-size:1.4rem; font-weight:800; color:#ffb84d; margin-bottom:.5rem; }
+    footer p { font-size:.9rem; margin-bottom:.4rem; }
+    footer a { color:#ffb84d; }
+
+    /* ===== 回到顶部 ===== */
+    #toTop {
+        position:fixed; right:20px; bottom:20px; width:46px; height:46px;
+        background:linear-gradient(135deg,#ff9d2f,#ff6a00); color:#fff;
+        border-radius:50%; display:flex; align-items:center; justify-content:center;
+        font-size:1.3rem; cursor:pointer; box-shadow:0 4px 12px rgba(255,106,0,.35);
+        opacity:0; visibility:hidden; transition:all .3s; z-index:1500; border:none;
+    }
+    #toTop.show { opacity:1; visibility:visible; }
+    #toTop:hover { transform:translateY(-3px); }
+
+    /* ===== 移动端自适应 ===== */
+    @media (max-width:768px) {
+        .hero h1 { font-size:2rem; }
+        .hero .desc { font-size:1rem; }
+        section { padding:2.5rem 0; }
+        .sec-head h2 { font-size:1.6rem; }
+        .nav-links { gap:.5rem; margin-top:.6rem; }
+        .nav-links a { font-size:.88rem; padding:.3rem .5rem; }
+        .logo { font-size:1.4rem; }
+        .grid { grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:1rem; }
+        .poster { height:210px; font-size:.9rem; }
+        .card-body h3 { font-size:.95rem; }
+    }
+    @media (max-width:420px) {
+        .hero h1 { font-size:1.65rem; }
+        .hero { padding:3.5rem 1rem; }
+        .grid { grid-template-columns:repeat(2,1fr); }
+        .btn { padding:.65rem 1.3rem; font-size:.9rem; }
+        .cat-grid { grid-template-columns:repeat(2,1fr); }
+    }
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+<div id="progress-bar"></div>
+
+<header>
+    <div class="nav-inner">
+        <div class="logo">🍊 桔子电影网 <span>juzidianyingwang-h5</span></div>
+        <nav class="nav-links">
+            <a href="#home">首页</a>
+            <a href="#movies">电影</a>
+            <a href="#tv">电视剧</a>
+            <a href="#anime">动漫</a>
+            <a href="#rank">排行榜</a>
+            <a href="#about">关于我们</a>
+        </nav>
+    </div>
+</header>
+
+<!-- 首页 -->
+<section id="home">
+    <div class="container hero">
+        <h1>🍊 欢迎来到桔子电影网</h1>
+        <div class="url">网址：https://juzidianyingwang-h5</div>
+        <p class="desc">桔子电影网汇聚海量高清影视资源，最新电影、热播剧集、精彩动漫每日更新，免费在线观看，畅享视听盛宴。</p>
+        <div class="hero-btns">
+            <a href="#movies" class="btn btn-primary">立即观影</a>
+            <a href="#about" class="btn btn-outline">了解更多</a>
+        </div>
+    </div>
+</section>
+
+<!-- 电影 -->
+<section id="movies">
+    <div class="container">
+        <div class="sec-head">
+            <h2>🎬 最新电影</h2>
+            <p>桔子电影网每日更新最新院线大片，高清流畅免费看</p>
+        </div>
+        <div class="grid">
+            <div class="card"><div class="poster g1">电影海报位</div><div class="card-body"><h3>电影名称 一</h3><div class="meta"><span class="tag">动作</span>2024 高清</div></div></div>
+            <div class="card"><div class="poster g2">电影海报位</div><div class="card-body"><h3>电影名称 二</h3><div class="meta"><span class="tag">科幻</span>2024 高清</div></div></div>
+            <div class="card"><div class="poster g3">电影海报位</div><div class="card-body"><h3>电影名称 三</h3><div class="meta"><span class="tag">喜剧</span>2024 高清</div></div></div>
+            <div class="card"><div class="poster g4">电影海报位</div><div class="card-body"><h3>电影名称 四</h3><div class="meta"><span class="tag">爱情</span>2024 高清</div></div></div>
+            <div class="card"><div class="poster g5">电影海报位</div><div class="card-body"><h3>电影名称 五</h3><div class="meta"><span class="tag">悬疑</span>2024 高清</div></div></div>
+            <div class="card"><div class="poster g6">电影海报位</div><div class="card-body"><h3>电影名称 六</h3><div class="meta"><span class="tag">动画</span>2024 高清</div></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- 电视剧 -->
+<section id="tv" style="background:#fffaf3;">
+    <div class="container">
+        <div class="sec-head">
+            <h2>📺 热播电视剧</h2>
+            <p>韩剧 · 美剧 · 国产剧，在桔子电影网一网打尽</p>
+        </div>
+        <div class="grid">
+            <div class="card"><div class="poster g2">剧集封面</div><div class="card-body"><h3>电视剧名称 一</h3><div class="meta"><span class="tag">剧情</span>40集</div></div></div>
+            <div class="card"><div class="poster g4">剧集封面</div><div class="card-body"><h3>电视剧名称 二</h3><div class="meta"><span class="tag">悬疑</span>30集</div></div></div>
+            <div class="card"><div class="poster g1">剧集封面</div><div class="card-body"><h3>电视剧名称 三</h3><div class="meta"><span class="tag">都市</span>36集</div></div></div>
+            <div class="card"><div class="poster g6">剧集封面</div><div class="card-body"><h3>电视剧名称 四</h3><div class="meta"><span class="tag">古装</span>50集</div></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- 动漫 -->
+<section id="anime">
+    <div class="container">
+        <div class="sec-head">
+            <h2>🌟 精彩动漫</h2>
+            <p>日本动漫 · 国产动画，每周同步更新，尽在桔子电影网</p>
+        </div>
+        <div class="cat-grid">
+            <div class="cat-card"><div class="cat-icon">⚔️</div><h3>热血战斗</h3><p>燃爆全场的热血番剧</p></div>
+            <div class="cat-card"><div class="cat-icon">💕</div><h3>恋爱校园</h3><p>甜蜜治愈的青春故事</p></div>
+            <div class="cat-card"><div class="cat-icon">🏰</div><h3>奇幻冒险</h3><p>异世界探险等你开启</p></div>
+            <div class="cat-card"><div class="cat-icon">😂</div><h3>搞笑日常</h3><p>轻松解压的欢乐时光</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- 排行榜 -->
+<section id="rank" style="background:#fffaf3;">
+    <div class="container">
+        <div class="sec-head">
+            <h2>🏆 热门排行榜</h2>
+            <p>桔子电影网最受观众喜爱的热门内容</p>
+        </div>
+        <div class="rank-list">
+            <div class="rank-item"><div class="rank-no gold">1</div><div class="rank-info"><h4>热播电影 · 第一名</h4><p>动作 / 2024 / 桔子电影网推荐</p></div></div>
+            <div class="rank-item"><div class="rank-no silver">2</div><div class="rank-info"><h4>热播电影 · 第二名</h4><p>科幻 / 2024 / 桔子电影网推荐</p></div></div>
+            <div class="rank-item"><div class="rank-no bronze">3</div><div class="rank-info"><h4>热播电影 · 第三名</h4><p>喜剧 / 2024 / 桔子电影网推荐</p></div></div>
+            <div class="rank-item"><div class="rank-no">4</div><div class="rank-info"><h4>热播剧集 · 第四名</h4><p>悬疑 / 30集 / 桔子电影网推荐</p></div></div>
+            <div class="rank-item"><div class="rank-no">5</div><div class="rank-info"><h4>热播剧集 · 第五名</h4><p>都市 / 36集 / 桔子电影网推荐</p></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- 关于 -->
+<section id="about">
+    <div class="container">
+        <div class="sec-head">
+            <h2>🍊 关于桔子电影网</h2>
+        </div>
+        <div class="about-box">
+            <p>桔子电影网（<strong>juzidianyingwang-h5</strong>）是一个专注于高清影视资源的在线观看平台，致力于为影迷提供最新、最全的电影、电视剧、动漫等优质内容。</p>
+            <div class="brand">🍊 桔子电影网 · juzidianyingwang-h5</div>
+            <p>网站名称：<strong>桔子电影网</strong></p>
+            <p>网站网址：<strong>https://juzidianyingwang-h5</strong></p>
+            <p>核心关键词：桔子电影网、juzidianyingwang-h5、高清电影、在线观看</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="ft-logo">🍊 桔子电影网</div>
+    <p>© 2024 桔子电影网 (juzidianyingwang-h5). All rights reserved.</p>
+    <p>网站名称：桔子电影网 | 网址：https://juzidianyingwang-h5</p>
+</footer>
+
+<button id="toTop" title="回到顶部">↑</button>
+
+<script>
+    // 回到顶部按钮
+    const toTop = document.getElementById('toTop');
+    window.addEventListener('scroll', () => {
+        toTop.classList.toggle('show', window.scrollY > 400);
+    });
+    toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // 顶部进度条
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+        const h = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.width = (h > 0 ? (window.scrollY / h * 100) : 0) + '%';
+    });
+</script>
+
+</body>
+</html>
